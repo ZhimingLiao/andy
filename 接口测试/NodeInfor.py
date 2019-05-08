@@ -76,6 +76,5 @@ if __name__ == "__main__":
     # 命名空间处理
     ns = {"t1": "urn:hl7-org:v3"}
     n = NodeInfor("test.xml", ns)
-    t1 = "/controlActProcess/subject/observationRequest/author/assignedEntity/" \
-         "representedOrganization/name/item/part/@value"
+    t1 = "controlActProcess/subject/registrationRequest/subject1/valueSet/version/displayName/@value"
     print("科室:", n.GetNodeInfo(t1))

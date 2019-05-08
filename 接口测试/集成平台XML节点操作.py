@@ -22,7 +22,7 @@ def GetAttrValue(Object, Attr):
             try:
                 if ob.attrib[Attr]:
                     # ReturnStr.join(ob.attrib[Attr])
-                    ReturnStr += ob.attrib[Attr]
+                    ReturnStr += ob.attrib[Attr] + "\n"
             except(KeyError):
                 return "警告:没有此属性值!"
             except(Exception) as e:
@@ -64,7 +64,7 @@ def GetNodeInfo(Str, n, ns):
         t = Str
     t1, t2 = t.split("@")
     t1 = t1[:-1:]
-    return GetAttrValue(Root.find(DoStr(t1, n), ns), t2)
+    return GetAttrValue(Root.findall(DoStr(t1, n), ns), t2)
 
 
 if __name__ == '__main__':
@@ -72,6 +72,8 @@ if __name__ == '__main__':
     ns = {"t1": "urn:hl7-org:v3"}
     # 从文档中载入需要解析节点
     Root = ET.parse('test.xml')
-    t1 = "controlActProcess/subject/observationRequest/component2/observationRequest/" \
-         "methodCode/item/displayName/@value"
+    t1 = "/controlActProcess/queryByParameter/queryByParameterPayload/actId/value/item/@extension"
     print(GetNodeInfo(t1, "t1:", ns))
+
+    # Str = "MSH|^~\&|HIS||EAI||20190419171000||ADT^A01|100404304227|P|2.4|||AL|AL|CHN|GBK"
+    # print(Str.split("|"), len(Str.split("|")))
