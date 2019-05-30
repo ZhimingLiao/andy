@@ -18,16 +18,13 @@
 # $ {MONTH_NAME_FULL} - 一个月的全名。 示例：1
 # 月，2
 # 月等
-# # File ----->> Setting ----->> Editor ----->> File and Code Templates ----->> Python Script
-
-
-
+# File ----->> Setting ----->> Editor ----->> File and Code Templates ----->> Python Script
 
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
 # 广医五院  志明  ${DATE} ${TIME}
 # 当前计算机登录名称 :${USER}
-# 项目名称  :${Name}
+# 项目名称  :${PROJECT_NAME}
 # 编译器   :${PRODUCT_NAME}
 __author____ = '志明'
 __time__ = '${DATE} ${TIME}'

@@ -30,14 +30,14 @@ def EnablePort(ip, port):
 
 
 if __name__ == "__main__":
+    import json
+    import requests
     # 获取本机电脑名
     myname = socket.getfqdn(socket.gethostname())
     # 获取本机ip
     myaddr = socket.gethostbyname(myname)
-    print('本机ip:{0};本机计算机名称为:{1}'.format(myaddr, myname))
-    print("-" * 50)
-    EnablePort("192.168.6.2", 3300)
-    EnablePort("192.168.6.188", 3100)
-    EnablePort("192.168.111.165", 5020)
-    # EnablePort("192.168.111.220", 5715)
-    EnablePort("192.168.6.189", 5715)
+    # 获取公网ip地址
+    ip_out = requests.get('http://jsonip.com').json()['ip']
+    print('局域网ip:{0};本机计算机名称为:{1},公网ip地址:{2}'.format(myaddr, myname, ip_out))
+    EnablePort("120.234.63.196", 3128)
+    EnablePort("218.60.8.83", 3129)
