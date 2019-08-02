@@ -45,19 +45,19 @@ if __name__ == '__main__':
     bd = BaiDuTranslator()
     fy = bd
     lg = Logger()
-    with open("c:/Users/andy/Desktop/zh_CN.locale.csv", "r") as f:
+    with open("c:/Users/andy/Desktop/test.csv", "r") as f:
         reader = csv.reader(f)
         datas = list()
         dss = list()
-        if os.path.exists("c:/Users/andy/Desktop/zh_CN.locale-1.csv"):
-            with open("c:/Users/andy/Desktop/zh_CN.locale-1.csv", "r") as fs:
+        if os.path.exists("c:/Users/andy/Desktop/test-1.csv"):
+            with open("c:/Users/andy/Desktop/test-1.csv", "r") as fs:
                 rr = csv.reader(fs)
                 for rrow in rr:
                     datas.append(rrow)
             fs.close()
         for va in datas:
             dss.append(va[0])
-        w = open("c:/Users/andy/Desktop/zh_CN.locale-1.csv", "a", newline="")
+        w = open("c:/Users/andy/Desktop/test-1.csv", "a", newline="")
         writer = csv.writer(w)
         for row in reader:
             if row[0] in dss:

@@ -31,5 +31,9 @@ if __name__ == '__main__':
     print(type(msg_hl7))
     # 得到消息段数
     print('共有{0}个消息段,分别为{1}'.format(len(msg_hl7), [msg_hl7[i][0] for i in range(len(msg_hl7))]))
+
     # 得到消息段里面信息,若出现无法通过索引值获取可能是没有进行去换行符和空格
-    print(msg_hl7['OBX'][0])
+    # 循环打印出OBX消息段
+    print("\n循环OBX的值:")
+    for var in msg_hl7['OBX']:
+        print(var)

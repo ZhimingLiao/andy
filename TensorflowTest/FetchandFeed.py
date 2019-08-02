@@ -16,7 +16,7 @@ input3 = tf.constant(5.0)
 
 # 定义操作
 add = tf.add(input1, input2)
-mul = tf.multiply(input3, add)
+mul = tf.multiply(input3, input1)
 
 # 启动会话
 with tf.Session() as sess:

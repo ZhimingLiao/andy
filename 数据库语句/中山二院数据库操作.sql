@@ -345,4 +345,7 @@ from DC_ORD_PACS a
          left join dc_pv e on a.PVCODE = e.PVCODE
          left join dc_pv_outp f on f.PK_PV = e.PK_PV
          left join DC_PV_INP g on g.PK_PV = e.PK_PV
-where a.CODE_REQ = '0923848747yy'
+where a.CODE_REQ = '0923848747yy';
+
+select count(PK_EMPI_ID) sum
+from EMPI_ZS.EMPI_CARD;
