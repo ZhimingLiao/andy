@@ -349,3 +349,11 @@ where a.CODE_REQ = '0923848747yy';
 
 select count(PK_EMPI_ID) sum
 from EMPI_ZS.EMPI_CARD;
+
+select *
+from cdr_zs.ELE_DOC_INFOR
+where PK_ELE_DOC_INFOR = '4c1f31e9-3b28-4953-a765-c4695caf294f';
+
+select *
+from DATA_EXCHANGE_CDR_LOG
+where
