@@ -93,6 +93,7 @@ if __name__ == "__main__":
            'NTE|1\r' \
            'OBX|14140288|TX|^^^05051104^培养7天无细菌生长||||||||F|||20190528085648\r'
     sock = tcp_create(ip=ip_test, port=port_test).get('result')
+    # 需要加上前后切割字符
     t = tcp_send(sock=sock, datas=msg2.encode('utf-8'))
     print(t.get('result').decode('utf-8'))
     sock.close()
