@@ -13,24 +13,35 @@
      <link rel="shortcut icon" type="image/x-icon" href="images/logo.ico" media="screen"/>
     <style rel="stylesheet">
         body {
-            background: #E9EBEE;
+            background: #e3f2fd;
+            padding-top: 26px;
             font-family: "Microsoft YaHei", "黑体";
         }
+
+        .resume {
+            -moz-box-shadow: 1px 1px 10px 6px #888888;
+            -webkit-box-shadow: 1px 1px 10px 6px #888888;
+            box-shadow: 1px 1px 10px 6px #888888;
+            background: #ffffff;
+        {#0.5px 0.5px 5px 5px yellow, 1px 1px 6px 6px green;#}
+        }
+
     </style>
 </head>
 <body>
-<div class="container mt-4">
-    <div class="shadow bg-white rounded">
+<div class="container">
+    <div class="resume">
         <!--简历头部,基本介绍-->
         <div style="background: #959FA8">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-2 col-md-12  col-sm-12 col-12 text-center container-fluid m-0 p-0">
+                    <div class="col-lg-2 col-md-12  col-sm-12 col-12 text-center container-fluid"
+                         style="padding: 0; margin: 0">
                         <img class="img-fluid" style="width: 100%; height: auto; " src="images/about-img.jpg"/>
                     </div>
                     <div class="col-lg-5  col-md-12 col-12 col-sm-12">
                         <div class="row">
-                            <div class="col-12 m-auto text-left pt-2">
+                            <div class="col-12 m-auto text-left" style="padding-top: 2%;">
                                 <h2 class="text-white">廖志明</h2>
                                 <h4>
                                     <small>软件研发工程师</small>
@@ -54,8 +65,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-5 col-md-12 col-sm-12 col-12 text-center m-auto animated rotateInDownRight"><h2
-                            class="display-1 text-white">简历</h2></div>
+                    <div class="col-lg-5 col-md-12 col-sm-12 col-12 text-center m-auto animated rotateInDownRight"><h1
+                            class="display-1 text-white">简历</h1></div>
                 </div>
             </div>
         </div>
@@ -288,10 +299,11 @@
             </div>
         </div>
     </div>
-  
+
+    
 </div>
 <!--页脚-->
-<div class="text-center container card-footer mt-3 mb-2" style="background: #E9EBEE">
+<div class="text-center container card-footer" style="margin-bottom: 2%; margin-top: 2%;background: #e3f2fd">
     <h6>
     <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModal" data-whatever="@廖志明">留言
     </button>
