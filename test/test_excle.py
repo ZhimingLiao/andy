@@ -7,13 +7,14 @@
 __author____ = '志明'
 __time__ = '2019-05-27 18:29'
 
-# excel文件读取操作工具包
-import xlrd as xd
+import os
+import random
+import time
+
 # excel文件写入工具包
 import openpyxl as xt
-import os
-import time
-import random
+# excel文件读取操作工具包
+import xlrd as xd
 
 
 def main1():
@@ -63,7 +64,7 @@ def trans():
     data = list()
     # 1, 判断文件是否存在,不存在则直接跳出
     if not os.path.exists(file):
-        print(r'不存在需要处理的文件<{0}>'.format(file))
+        print('温馨提示:\n不存在需要处理的文件:{0}'.format(file))
         exit(1)
     f = xd.open_workbook(file).sheet_by_index(0)
 
@@ -117,7 +118,7 @@ class Trans(object):
     def trans(self, file_path=None, transtor=None):
         # 判断文件是否存在,不存在则直接跳出
         if not os.path.exists(file_path):
-            print(r'不存在需要处理的文件<{0}>'.format(file))
+            print('温馨提示:\n不存在需要处理的文件:{0}'.format(file))
             return
         f = xd.open_workbook(file).sheet_by_index(0)
         datas = list()
@@ -161,7 +162,6 @@ class Trans(object):
 if __name__ == '__main__':
     # 百度翻译接口调用
     from SuTranslate.BaiDuTranslator import BaiDuTranslator
-
     tran = Trans('demo')
     file = r'c:\Users\andy\Desktop\test.xlsx'
     BD = BaiDuTranslator()

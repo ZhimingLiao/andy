@@ -49,7 +49,7 @@ def test_tcp_create(ip='192.168.111.176', port=3600):
 
 
 # 3.使用socket对象进行发送数据
-def test_tcp_send(sock=None, datas=None, start=b'\x0b', end=b'\x1c'):
+def test_tcp_send(sock=None, datas=None, start=b'\x0b', end=b'\x1c\x0d'):
     '''
     使用指定的套接字对象发送字节码数据;适用于已经创建的套接字,原型来自于hl7消息测试
     :param sock: 套接字对象
