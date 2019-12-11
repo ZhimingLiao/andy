@@ -19,7 +19,7 @@ class ErrorHunter(object):
             try:
                 return func(*args, **kwargs)
             except (ConnectionError) as e:
-                print("连接出错....")
+                return {"error": 500, "msg": f"数据库连接出错!(备注:{e})"}
 
         return _decorator
 
@@ -253,4 +253,31 @@ if __name__ == "__main__":
     # test_insert_data_list()
     # test_delete_data_by_id()
     # print(es.es.indices.get_aliases().keys())
-    test_update_data_list()
+    # test_update_data_list()
+    data = {"IS_ENABLE": "1",
+            "MASTER_DEF_DESC": "计划与干预",
+            "PY": "YCFJKZDLBDMB",
+            "LAST_MODIFY_TIME": "2019-03-22T06:19:36.9105349Z",
+            "IS_PUBLISH_DEF": "1",
+            "MASTER_DEF_CODE": "CV06.00.219",
+            "LAST_PUBLISH_TIME": "2019-03-22T06:19:36.9105349Z",
+            "STANDARD_ID": "",
+            "MASTER_DEF_ID": "dca31c69-0638-418b-bd74-36a80b1a860e",
+            "CREATOR_ID": "1",
+            "MASTER_DIR_ID": "CF0239987DA44B138127CA4AEDAE3E46",
+            "LAST_MODIFIER_NAME": "",
+            "DELETE_FLAG": "0",
+            "STANDARD_NAME": "",
+            "MASTER_DEF_NAME": "孕产妇健康指导类别代码表",
+            "SORT": 203,
+            "CREATOR_NAME": "超级管理员",
+            "MASTER_PRO_VERSION_NO": "1",
+            "CREATE_TIME": "2019-03-22T06:19:36.9105349Z",
+            "IS_PUBLISH_MEMBER": "0",
+            "LAST_MODIFIER_ID": "",
+            "DATA_TYPE": "DATASTANDARD",
+            "MASTER_DIR_NAME": "数据元值域",
+            "MASTER_MEMBER_VERSION_NO": "0"}
+    es.update_data_list(index_name="mdms.entity.masterdatamanage.master_definition",
+                        doc_type="MASTER_DEFINITION",
+                        id_data_dict={"dca31c69-0638-418b-bd74-36a80b1a860e": data})

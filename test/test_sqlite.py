@@ -4,12 +4,14 @@
 # 当前计算机登录名称 :andy
 # 项目名称  :andy
 # 编译器   :PyCharm
+import json
 import os
 import sqlite3
 import time
 
 import xlrd
 
+from Tools.ElasticSearchTool.ElasticSearchImporter import ElasticSearchImporter
 from Tools.ElasticSearchTool.utils import get_uuid
 
 
@@ -38,7 +40,8 @@ def mdm_master():
 
 
 def mdm_item():
-    file_p = r"C:\Users\andy\OneDrive\文档\恺恩泰\mdm\mdm_ws"
+    # 此处写入文件夹目录，default：C:\Users\andy\OneDrive\文档\恺恩泰\mdm\mdm_ws
+    file_p = r""
     file_list = walkFile(file_p)
     # 1.获取数据库记录list
     db_path = r"C:\Users\andy\OneDrive\文档\恺恩泰\mdm\mdm.db"
@@ -80,6 +83,10 @@ def mdm_item():
     conn.close()
 
 
+def take_element(e):
+    return int(json.loads(e['_source']['MEMBER'])['SORT'])
+
+
 def mdm_insert():
     db_path = r"C:\Users\andy\OneDrive\文档\恺恩泰\mdm\mdm.db"
     conn = sqlite3.connect(db_path, timeout=2000)
@@ -111,7 +118,63 @@ def walkFile(file):
     return file_list
 
 
+def mdm_to_sqlite():
+    # 从es数据库批量导入表数据到sqlite数据库
+    # 1.先从定义表找到表数据
+    db_path, es_define, es_menber = r"C:\Users\andy\OneDrive\文档\恺恩泰\mdm\mdm.db", \
+                                    r'mdms.entity.masterdatamanage.master_definition', \
+                                    r"mdms.entity.masterdatamanage.master_member"
+    es = ElasticSearchImporter()
+    res = es.search_by_body(index_name=es_define, MASTER_DIR_NAME="数据元值域")['hits']['hits']
+    count = 0
+    conn = sqlite3.connect(db_path, timeout=2000)
+    cur = conn.cursor()
+    for content in res:
+        if content['_source']['DELETE_FLAG'] == '1':
+            print(f"数据元值域:{content['_source']['MASTER_DEF_NAME']},置上删除标识,故在此不写入数据库!")
+            continue
+        print(f"数据元值域:{content['_source']['MASTER_DEF_NAME']}正在写入数据库......")
+        table_name = content['_source']['MASTER_DEF_CODE']
+        sql_create = f"""
+         CREATE TABLE IF NOT EXISTS '""" + table_name + """' (
+      code  TEXT NOT NULL PRIMARY KEY,
+      name  TEXT NOT NULL,
+      desc  TEXT NOT NULL,
+      create_time TEXT not null)
+        """
+        # print(sql_create)
+        # 循环写入数据
+        res_men = \
+        es.search_by_body(index_name=es_menber, MASTER_DEF_NAME=content['_source']['MASTER_DEF_NAME'])['hits']['hits']
+        # 排序
+        res_men.sort(key=take_element, reverse=False)
+        for rm in res_men:
+            # 创建表
+            cur.execute(sql_create)
+            data_json = json.loads(rm['_source']['MEMBER'])
+            content_insert = (data_json['CODE'], data_json['NAME'], content['_source']['MASTER_DEF_NAME'] + "," +
+                              content['_source']['MASTER_DEF_DESC'],
+                              time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+            count += 1
+            print(f"写入数据:{content_insert}到表:{content['_source']['MASTER_DEF_NAME']},{table_name}")
+            try:
+                cur.execute("insert into '" + table_name + "' values(?, ?, ?, ?)", content_insert)
+            except (sqlite3.IntegrityError,) as e:
+                print(f"重复主键:code({data_json['CODE']}),调过插入,继续进行插入....")
+                continue
+            # break
+        # break
+    print(f"共完成数据{count}条数据入库！")
+    conn.commit()
+    cur.close()
+    conn.close()
+    # 2.根据第一步得到的表名，在成员表找到数据，在sql建表，写入数据
+    return
+
+
 if __name__ == "__main__":
     # mdm_insert()
-    mdm_item()
+    # mdm_item()
     # pass
+    # mdm_to_sqlite()
+    pass

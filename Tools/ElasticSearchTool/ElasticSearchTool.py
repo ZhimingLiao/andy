@@ -13,9 +13,9 @@ import time
 
 # excel文件读取操作工具包
 import xlrd as xd
-from utils import get_py, get_uuid
 
 from Tools.ElasticSearchTool.ElasticSearchImporter import ElasticSearchImporter as es
+from utils import get_py, get_uuid
 
 
 class ElasticSearchTool(object):
@@ -448,11 +448,11 @@ class ElasticSearchTool(object):
         #                          MASTER_DEF_NAME="医疗费用记录子集",  MASTER_DEF_ID="606909500B8347E9A21A3317CD78A904",
         #                          MASTER_DEF_CODE="HDSD00.02_V1.0_4")
 
-        MASTER_DEF_ID, MASTER_DEF_CODE, MASTER_DEF_NAME = "0DACEED8D56D4E8EACF799CB2FABD7EC", "HDSD00.06_V1.0_5", "麻醉术后访视记录子集"
+        MASTER_DEF_ID, MASTER_DEF_CODE, MASTER_DEF_NAME = "0DACEED8D56D4E8EACF799CB2FABD7EC", "HDSD00.03_V1.0_1", "门（急）诊病历子集"
 
-        # print(f'optioning...\nstep 1....')
-        # res = self.mdm_pro_deal(MASTER_DEF_ID=MASTER_DEF_ID, MASTER_DEF_CODE=MASTER_DEF_CODE,
-        #                         MASTER_DEF_NAME=MASTER_DEF_NAME)
+        print(f'optioning...\nstep 1....')
+        res = self.mdm_pro_deal(MASTER_DEF_ID=MASTER_DEF_ID, MASTER_DEF_CODE=MASTER_DEF_CODE,
+                                MASTER_DEF_NAME=MASTER_DEF_NAME)
         # print(res)
         print('step 2 ......')
         res = self.mdm_menber_deal(index_name=mindex_name, doc_type=mdoc_type, file_path=mfile_path, tmp_path=mtmp_path,
@@ -514,9 +514,7 @@ where a.parent_id <> 0;
         filter_name = list([i[0] for i in res_cur])
         count = 0
         # for name in filter_name:
-        for name in ('麻醉术后访视记录子集', '出院记录子集', '会诊记录子集', '阶段小结子集', '转科记录子集', '交接班记录子集',
-                     '疑难病历讨论子集', '上级医师查房记录子集', '日常病程记录子集', '首次病程记录子集',
-                     '中医住院病案首页子集', '住院病案首页子集'):
+        for name in ("门(急)诊病历子集",):
             res = self.es.search_by_body(index_name=index_name, MASTER_DEF_NAME=name)['hits']
             con = res_cur[filter_name.index(name)]
             print(con)
@@ -565,9 +563,9 @@ where a.parent_id <> 0;
         filter_name = list([i[0] for i in res_cur])
         count = 0
         # for name in filter_name:
-        for name in ('出院记录子集',):
+        for name in ('门(急)诊病历子集',):
             res = self.es.search_by_body(index_name=index_name, MASTER_DEF_NAME=name)['hits']['hits']
-            con = res_cur[filter_name.index(name)]
+            con = res_cur[filter_name.index("门（急）诊病历子集")]
             for r in res:
                 try:
                     content_json = json.loads(r['_source']['MEMBER'])
@@ -591,28 +589,41 @@ where a.parent_id <> 0;
         return
 
     def mdm_insert_e(self):
+        """
+        根据mdm数据库的表记录数进行写数据到es数据库
+        :return:
+        """
         index_name = "mdms.entity.masterdatamanage.master_member"
         # sqlite数据库
         db_path = r"C:\Users\andy\OneDrive\文档\恺恩泰\mdm\mdm.db"
         conn = sqlite3.connect(db_path, timeout=2000)
-        sql = """select d.id, d.code, d.de_id, d.name, d.definition, d.format, d.type, d.value, c."version ", c.rir,
-       c.evn_rel, c.authority, c.mode_cls, c.org_sub, c.status_reg, d.create_time, d.create_id,  d.sort
+        #         sql = """select d.id, d.code, d.de_id, d.name, d.definition, d.format, d.type, d.value, c."version ", c.rir,
+        #        c.evn_rel, c.authority, c.mode_cls, c.org_sub, c.status_reg, d.create_time, d.create_id,  d.sort
+        # from mdm_master a
+        # left join mdm_master b on a.parent_id = b.id and a.parent_id<>0 and b.parent_id = 0
+        # left join mdm_common c on b.common_id = c.id
+        # left join mdm_master_item d on a.id = d.parent_id
+        # where a.parent_id <> 0
+        # order by a.code asc, d.code asc, d.sort asc;
+        # """
+        sql = """
+        select distinct  d.code, d.de_id, d.name, d.definition, d.format, d.type, d.value, c."version ", c.rir,
+       c.evn_rel, c.authority, c.mode_cls, c.org_sub, c.status_reg, d.create_id
 from mdm_master a
 left join mdm_master b on a.parent_id = b.id and a.parent_id<>0 and b.parent_id = 0
 left join mdm_common c on b.common_id = c.id
 left join mdm_master_item d on a.id = d.parent_id
 where a.parent_id <> 0
 order by a.code asc, d.code asc, d.sort asc;
-"""
+        """
         cur = conn.cursor()
         cur.execute(sql)
 
-        id = ""
         res_cur = cur.fetchall()
         res = self.es.search_by_body(index_name=index_name, MASTER_DEF_NAME='卫生信息数据元WS363')['hits']['hits']
         count = 0
         for r in res:
-            print(f'删除...{r["_id"]}')
+            # print(f'删除第{res.index(r)}条记录...{r["_id"]}')
             self.es.delete_data_by_id(index_name=index_name, doc_type="MASTER_MEMBER", id=r["_id"])
         for r in res_cur:
             # r = res_cur[0]
@@ -639,36 +650,37 @@ order by a.code asc, d.code asc, d.sort asc;
                 "CREATOR_NAME": "系统管理员",
                 "DELETE_FLAG": "0"
             }
-            data['MASTER_MEMBER_ID'] = r[0]
-            data['PY'] = get_py(r[3])
-            data['MEMBER']['MASTER_MEMBER_ID'] = r[0]
-            data['MEMBER']['SORT'] = r[len(r) - 1]
+            data['MASTER_MEMBER_ID'] = get_uuid()
+            data['PY'] = get_py(r[2])
+            data['CREATE_TIME'] = f'{time.strftime("%Y-%m-%d", time.localtime())}' \
+                                  f'T{time.strftime("%H:%M:%S", time.localtime())}Z'
+            data['MEMBER']['MASTER_MEMBER_ID'] = data['MASTER_MEMBER_ID']
+            data['MEMBER']['SORT'] = count
             data['MEMBER']['CREATOR_ID'] = 'zhiming'
-            data['MEMBER']['NAME'] = r[3]
-            data['MEMBER']['CODE'] = r[1]
-            data['MEMBER']['ORG_SUB'] = r[13]
-            data['MEMBER']['DEFINITION'] = r[4]
-            data['MEMBER']['EVN_REL'] = r[10]
-            data['MEMBER']['AUTHORITY'] = r[11]
-            data['MEMBER']['VALUE'] = r[7]
-            data['MEMBER']['TYPE'] = r[6]
-            data['MEMBER']['FORMAT'] = r[5]
-            data['MEMBER']['PY'] = get_py(r[3])
-
-            data['SORT'] = r[len(r) - 1]
+            data['MEMBER']['NAME'] = r[2]
+            data['MEMBER']['CODE'] = r[0]
+            data['MEMBER']['ORG_SUB'] = r[12]
+            data['MEMBER']['DEFINITION'] = r[3]
+            data['MEMBER']['EVN_REL'] = r[9]
+            data['MEMBER']['AUTHORITY'] = r[10]
+            data['MEMBER']['VALUE'] = r[6]
+            data['MEMBER']['TYPE'] = r[5]
+            data['MEMBER']['FORMAT'] = r[4]
+            data['MEMBER']['PY'] = get_py(r[2])
+            data['MEMBER']['CREATE_TIME'] = f'{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}'
+            data['SORT'] = count
             data['CREATOR_NAME'] = 'zhiming'
             data['MEMBER'] = json.dumps(data['MEMBER'], ensure_ascii=False)
             tmp = dict()
-            tmp[r[0]] = data
+            tmp[data['MASTER_MEMBER_ID']] = data
             # conn.commit()
             self.es.insert_data_list(index_name=index_name, doc_type="MASTER_MEMBER", data_dict=tmp)
             count += 1
-            print(f'写入数据:{r[3]}成功!')
+            # print(f'写入数据:{r[3]}成功!')
             del tmp
-        print(f'写入数据成功,共写入{count}条数据!')
-
         cur.close()
         conn.close()
+        return {"error": 0, "msg": f"写入数据成功,共写入数据:{count}条,共删除记录数:{len(res)}条"}
 
 
 if __name__ == "__main__":
@@ -682,6 +694,7 @@ if __name__ == "__main__":
     # es.mdm_insert()
     # es.mdm_update_pro()
     # print(es.es.search_by_body(index_name="mdms.entity.masterdatamanage.master_property", MASTER_DEF_NAME='麻醉术前访视记录子集'))
-    es.mdm_update_men()
-    # es.mdm_insert_e()
+    # es.mdm_update_men()
+    res = es.mdm_insert_e()
+    print(res)
     # es.mdm()
