@@ -133,8 +133,9 @@ def sqlite2mdm_e(name_file=None) -> dict:
 
     # 查询有数据,则写头部信息
     if res:
-        file_save(content=f"## 卫生信息数据元目录\n\n> [!NOTE]\n>\n>\n> 以下数据摘自 **WS364《卫生信息数据元目录》**, 共计**{len(res)}**条数据元\n",
-                  name_file=name_file)
+        file_save(
+            content=f"## 卫生信息数据元目录\n\n> [!NOTE]\n>\n>\n> 以下数据摘自 **WS 363.12-2011《卫生信息数据元目录》**, 共计**{len(res)}**条数据元\n",
+            name_file=name_file)
         file_save(content="##### 以下数据为数据元公有属性\n\n| 版本 |           注册机构           | 相关环境 | 分类模式 |"
                           "      主管机构       | 注册状态 |      提交机构       |\n| :--: | :--------------------------: "
                           "| :------: | :------: | :-----------------: | :------: | :-----------------: |\n"
@@ -178,8 +179,9 @@ order by a.code asc, d.code asc, d.sort asc;
 
     # 若有数据,则写入标题头
     if res:
-        file_save(content=f"## 卫生信息数据元目录\n\n> [!NOTE]\n>\n>\n> 以下数据摘自 **WS364《电子病历共享文档规范》**, 共计**{len(res)}**条数据元\n",
-                  name_file=name_file)
+        file_save(
+            content=f"## 卫生信息数据元目录\n\n> [!NOTE]\n>\n>\n> 以下数据摘自 **WS 445.1-2014《电子病历基本数据集》**, 共计**{len(res)}**条数据\n",
+            name_file=name_file)
         file_save(
             content=f"| 序号 | 内部标识符 | 数据元标识符 | 数据元名称 | 定义 | 数据类型 | 表示格式 | 数据元允许值 | 版本 | 注册机构 | 相关环境 | 分类模式 | 主管机构 | 注册状态 | 提交机构 | 章节 |\n| ---- | ---------- | ------------ | ---------- | ---- | -------- | -------- | ------------ | ---- | -------- | -------- | -------- | -------- | -------- | -------- | ---- |",
             name_file=name_file)
@@ -215,7 +217,7 @@ def sqlite2mdm_range(name_file=None, path_db: str = r"C:\Users\andy\OneDrive\文
     # 需要写数据时,先写表头
     if table_names:
         file_save(
-            content=f"## 卫生信息数据元值域代码\n\n> [!NOTE]\n>\n>\n> 以下数据摘自 **WS364《卫生信息数据元值域代码》**, 共计**{len(table_names)}**个表\n",
+            content=f"## 卫生信息数据元值域代码\n\n> [!NOTE]\n>\n>\n> 以下数据摘自 ****WS 364.4-2011《卫生信息数据元值域代码》**, 共计**{len(table_names)}**个表\n",
             name_file=name_file)
 
     for names in table_names:
@@ -362,11 +364,12 @@ if __name__ == "__main__":
         # 2.想要从sqlite3数据库生成数据元值域数据, 请执行下面代码
         # res = sqlite2mdm_range(name_file="mdm_range.md")
         # 3.想要从sqlite3数据库生成数据元数据, 请执行下面代码
-        res = sqlite2mdm_e(name_file="mdm_e.md")
+        # res = sqlite2mdm_e(name_file="mdm_e.md")
         # print([f"|content[{i}]" for i in range(1,17)]
         # )
         # 建表写入数据
         # res = insert_cv_batch(name_table='CV08.10.006', desc=" 血 吸虫病诊 断(治 疗)机 构级别代码表,卫生机构", flag=False)
         # res = "  将局麻药物 注射 于神经干 的周 围 ,使该 神 经 分 布 的 区域 产 生 麻 醉作 用的方法".replace(" ", "")
         # res = update_e()
+        res = (get_uuid(), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         print(res)

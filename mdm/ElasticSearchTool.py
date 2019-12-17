@@ -360,6 +360,7 @@ class ElasticSearchTool(object):
 
     def sqlite2es_range(self, path_db=r"C:\Users\andy\OneDrive\文档\恺恩泰\mdm\mdm.db"):
         """
+        最近使用时间为2019-12-11
         本方法根据sqlites数据库定制化一键同步数据到es数据库
         :param path_db:
         :return:
@@ -424,7 +425,6 @@ class ElasticSearchTool(object):
             if flag_exist:
                 # 存在则删除表表,删除属性,删除记录
                 # 1.删除表
-
                 self.__es.delete_data_by_id(index_name="mdms.entity.masterdatamanage.master_definition",
                                             doc_type="MASTER_DEFINITION", id=id_es)
                 # 2.删除属性
@@ -637,8 +637,5 @@ if __name__ == "__main__":
         # res = es.mdm_define()
         # res = es.mdm_to_sqlite()
         # print(res)
-        # res = ElasticSearchTool.sqlite2es_range()
         res = es.sqlite2es_range()
         print(res)
-        # s = "疫苗名称代码表,药品、设备与材料"
-        # print(s.find("("), s.rfind(")"), s[s.find("(")+1:s.rfind(")")])

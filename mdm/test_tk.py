@@ -113,6 +113,7 @@ def string_to_ip_port(string):
 
 def test_es_thread(es_addr):
     import re
+    error = 0
     ip_port_format = ('(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.'
                       '(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.'
                       '(\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.'
@@ -120,16 +121,19 @@ def test_es_thread(es_addr):
                       '(\d+/)')
     if not re.search(ip_port_format, es_addr.replace("localhost", "127.0.0.1")):
         tkinter.messagebox.showinfo("温馨提示", "es地址不正确!")
-        return
+        error = 1
+        return {"error": error, "msg": "连接失败!"}
     res = re.findall(ip_port_format, es_addr.replace("localhost", "127.0.0.1"))
     ip, port = ".".join(res[0][0:4]), int(res[0][4].replace(r"/", "").strip())
     res = test_port_use(ip, port)
     if res['error'] > 0:
         tkinter.messagebox.showwarning("温馨提示", f"连接数据地址为:{es_addr}失败!请检查本机是否可以ping通对应的数据库!")
-        return
+        error = 2
+        return {"error": error, "msg": "连接失败!"}
     e = es(ip, port)
     res = e.search_size(index_name="mdms.entity.masterdatamanage.master_definition")
     tkinter.messagebox.showinfo("成功提示", f"恭喜您连接ES数据库:{es_addr}成功!,在定义表共找到{res}条记录!")
+    return {"error": error, "msg": "连接成功!"}
     # res = test_port_use(ip, port)
     # print(res)
 
@@ -141,6 +145,11 @@ def print_log(msg):
 
 
 def mdm_import(index, uuid):
+    t = test_es_thread(index)
+    if t.get("error") > 0:
+        print_log(msg=f"\n{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())};您点击了导入\还原操作!(备注:{t})")
+        return {"error": 0, "msg": "因es数据库连接失败,导致无法继续执行下面代码!"}
+
     index, uuid, file_name = index.strip(), uuid.strip(), file_path["text"].strip()
     index_define = r"mdms.entity.masterdatamanage.master_definition"
     index_pro = r"mdms.entity.masterdatamanage.master_property"
@@ -257,7 +266,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # name = get_time_name()
-    # print(name)
-    # test_es("http://localhost:9200/")
-    # print(test_port_use("127.0.0.1", 9200))

@@ -1,0 +1,9 @@
+{
+  "id_dir": "02C9B5F688694C529D9A4C7BA00856CE",
+  "index_name_define": "mdms.entity.masterdatamanage.master_definition",
+  "doc_type_define": "MASTER_DEFINITION",
+  "index_name_property": "mdms.entity.masterdatamanage.master_property",
+  "doc_type_property": "MASTER_PROPERTY",
+  "index_name_menber": "mdms.entity.masterdatamanage.master_member",
+  "doc_type_menber": "MASTER_MEMBER"
+}

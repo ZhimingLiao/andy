@@ -23,6 +23,7 @@ class Timer(object):
         finally:
             end = perf_counter()
             print('耗时:{:.3f}s'.format(round(end - start + 0.0005, 3)))
+            # return {"error": 0, "msg": "时间统计成功!(备注:统计单位统一为秒(s))", "detail": '{:.3f}'.format(round(end - start + 0.0005, 3))}
             # print('耗时:{0}s'.format(end - start))
 
 

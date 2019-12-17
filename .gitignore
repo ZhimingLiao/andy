@@ -3,3 +3,5 @@ TensorflowTest/logs/
 # 过滤参考 https://www.cnblogs.com/kevingrace/p/5690241.html
 */__pychache__/*
 *.pyc
+*/dist/*
+*/build/*
