@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>MainWindow</class>
+    <widget class="QMainWindow" name="MainWindow">
+        <property name="windowModality">
+            <enum>Qt::NonModal</enum>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>500</width>
+                <height>300</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>500</width>
+                <height>300</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>500</width>
+                <height>300</height>
+            </size>
+        </property>
+        <property name="palette">
+            <palette>
+                <active>
+                    <colorrole role="Text">
+                        <brush brushstyle="SolidPattern">
+                            <color alpha="255">
+                                <red>25</red>
+                                <green>25</green>
+                                <blue>25</blue>
+                            </color>
+                        </brush>
+                    </colorrole>
+                    <colorrole role="BrightText">
+                        <brush brushstyle="SolidPattern">
+                            <color alpha="255">
+                                <red>163</red>
+                                <green>163</green>
+                                <blue>163</blue>
+                            </color>
+                        </brush>
+                    </colorrole>
+                    <colorrole role="PlaceholderText">
+                        <brush brushstyle="SolidPattern">
+                            <color alpha="128">
+                                <red>225</red>
+                                <green>225</green>
+                                <blue>112</blue>
+                            </color>
+                        </brush>
+                    </colorrole>
+                </active>
+                <inactive>
+                    <colorrole role="Text">
+                        <brush brushstyle="SolidPattern">
+                            <color alpha="255">
+                                <red>25</red>
+                                <green>25</green>
+                                <blue>25</blue>
+                            </color>
+                        </brush>
+                    </colorrole>
+                    <colorrole role="BrightText">
+                        <brush brushstyle="SolidPattern">
+                            <color alpha="255">
+                                <red>163</red>
+                                <green>163</green>
+                                <blue>163</blue>
+                            </color>
+                        </brush>
+                    </colorrole>
+                    <colorrole role="PlaceholderText">
+                        <brush brushstyle="SolidPattern">
+                            <color alpha="128">
+                                <red>225</red>
+                                <green>225</green>
+                                <blue>112</blue>
+                            </color>
+                        </brush>
+                    </colorrole>
+                </inactive>
+                <disabled>
+                    <colorrole role="Text">
+                        <brush brushstyle="SolidPattern">
+                            <color alpha="255">
+                                <red>120</red>
+                                <green>120</green>
+                                <blue>120</blue>
+                            </color>
+                        </brush>
+                    </colorrole>
+                    <colorrole role="BrightText">
+                        <brush brushstyle="SolidPattern">
+                            <color alpha="255">
+                                <red>163</red>
+                                <green>163</green>
+                                <blue>163</blue>
+                            </color>
+                        </brush>
+                    </colorrole>
+                    <colorrole role="PlaceholderText">
+                        <brush brushstyle="SolidPattern">
+                            <color alpha="128">
+                                <red>225</red>
+                                <green>225</green>
+                                <blue>112</blue>
+                            </color>
+                        </brush>
+                    </colorrole>
+                </disabled>
+            </palette>
+        </property>
+        <property name="font">
+            <font>
+                <family>微软雅黑</family>
+                <pointsize>11</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+            </font>
+        </property>
+        <property name="mouseTracking">
+            <bool>true</bool>
+        </property>
+        <property name="windowTitle">
+            <string>主数据工具</string>
+        </property>
+        <property name="documentMode">
+            <bool>false</bool>
+        </property>
+        <widget class="QWidget" name="centralwidget">
+            <widget class="QPushButton" name="btn_import">
+                <property name="geometry">
+                    <rect>
+                        <x>350</x>
+                        <y>200</y>
+                        <width>111</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="palette">
+                    <palette>
+                        <active>
+                            <colorrole role="Button">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="Text">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>255</green>
+                                        <blue>255</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="BrightText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>0</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="ButtonText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>255</green>
+                                        <blue>255</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="Base">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="Window">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="PlaceholderText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="128">
+                                        <red>0</red>
+                                        <green>255</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                        </active>
+                        <inactive>
+                            <colorrole role="Button">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="Text">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>255</green>
+                                        <blue>255</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="BrightText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>0</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="ButtonText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>255</green>
+                                        <blue>255</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="Base">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="Window">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="PlaceholderText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="128">
+                                        <red>0</red>
+                                        <green>255</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                        </inactive>
+                        <disabled>
+                            <colorrole role="Button">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="Text">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>120</red>
+                                        <green>120</green>
+                                        <blue>120</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="BrightText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>0</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="ButtonText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>120</red>
+                                        <green>120</green>
+                                        <blue>120</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="Base">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="Window">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="255">
+                                        <red>255</red>
+                                        <green>0</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                            <colorrole role="PlaceholderText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="128">
+                                        <red>255</red>
+                                        <green>255</green>
+                                        <blue>255</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                        </disabled>
+                    </palette>
+                </property>
+                <property name="font">
+                    <font>
+                        <family>Microsoft YaHei</family>
+                        <pointsize>11</pointsize>
+                        <weight>75</weight>
+                        <bold>true</bold>
+                    </font>
+                </property>
+                <property name="toolTip">
+                    <string>可以使用快捷键Ctrl+Enter哟!</string>
+                </property>
+                <property name="layoutDirection">
+                    <enum>Qt::RightToLeft</enum>
+                </property>
+                <property name="autoFillBackground">
+                    <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                    <string notr="true">background-color: rgb(255, 0, 0);</string>
+                </property>
+                <property name="text">
+                    <string>开始导入</string>
+                </property>
+                <property name="shortcut">
+                    <string>Ctrl+Return</string>
+                </property>
+                <property name="checkable">
+                    <bool>false</bool>
+                </property>
+                <property name="autoRepeat">
+                    <bool>true</bool>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="default">
+                    <bool>false</bool>
+                </property>
+                <property name="flat">
+                    <bool>false</bool>
+                </property>
+            </widget>
+            <widget class="QWidget" name="gridLayoutWidget">
+                <property name="geometry">
+                    <rect>
+                        <x>40</x>
+                        <y>40</y>
+                        <width>421</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <layout class="QGridLayout" name="gridLayout">
+                    <item row="0" column="1">
+                        <widget class="QLineEdit" name="le_es_ip">
+                            <property name="text">
+                                <string>http://127.0.0.1:9200</string>
+                            </property>
+                            <property name="maxLength">
+                                <number>50</number>
+                            </property>
+                            <property name="echoMode">
+                                <enum>QLineEdit::Normal</enum>
+                            </property>
+                            <property name="dragEnabled">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                    </item>
+                    <item row="0" column="0">
+                        <widget class="QLabel" name="label">
+                            <property name="text">
+                                <string>ElasticSearch地址:</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </widget>
+            <widget class="QLabel" name="lab_filepath">
+                <property name="geometry">
+                    <rect>
+                        <x>40</x>
+                        <y>80</y>
+                        <width>131</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>文件路径:</string>
+                </property>
+            </widget>
+            <widget class="QLineEdit" name="le_filepath">
+                <property name="geometry">
+                    <rect>
+                        <x>110</x>
+                        <y>80</y>
+                        <width>351</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="palette">
+                    <palette>
+                        <active>
+                            <colorrole role="PlaceholderText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="128">
+                                        <red>93</red>
+                                        <green>93</green>
+                                        <blue>93</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                        </active>
+                        <inactive>
+                            <colorrole role="PlaceholderText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="128">
+                                        <red>93</red>
+                                        <green>93</green>
+                                        <blue>93</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                        </inactive>
+                        <disabled>
+                            <colorrole role="PlaceholderText">
+                                <brush brushstyle="SolidPattern">
+                                    <color alpha="128">
+                                        <red>93</red>
+                                        <green>93</green>
+                                        <blue>93</blue>
+                                    </color>
+                                </brush>
+                            </colorrole>
+                        </disabled>
+                    </palette>
+                </property>
+                <property name="toolTip">
+                    <string>此处为您需要导入的excel文件路径</string>
+                </property>
+                <property name="text">
+                    <string/>
+                </property>
+                <property name="maxLength">
+                    <number>100</number>
+                </property>
+                <property name="placeholderText">
+                    <string>此处为您需要导入的excel文件路径</string>
+                </property>
+                <property name="clearButtonEnabled">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton" name="btn_file_path">
+                <property name="geometry">
+                    <rect>
+                        <x>350</x>
+                        <y>142</y>
+                        <width>111</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>文件选择</string>
+                </property>
+                <property name="shortcut">
+                    <string>Ctrl+O</string>
+                </property>
+            </widget>
+            <widget class="QLabel" name="label_2">
+                <property name="geometry">
+                    <rect>
+                        <x>30</x>
+                        <y>140</y>
+                        <width>301</width>
+                        <height>101</height>
+                    </rect>
+                </property>
+                <property name="autoFillBackground">
+                    <bool>true</bool>
+                </property>
+                <property name="text">
+                    <string/>
+                </property>
+                <property name="textFormat">
+                    <enum>Qt::PlainText</enum>
+                </property>
+                <property name="pixmap">
+                    <pixmap>C:/Users/andy/.designer/OneDrive/文档/docs/docs/mdm/img/logo.png</pixmap>
+                </property>
+                <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                </property>
+                <property name="wordWrap">
+                    <bool>true</bool>
+                </property>
+                <property name="indent">
+                    <number>0</number>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QStatusBar" name="statusbar"/>
+        <widget class="QMenuBar" name="menubar">
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>0</y>
+                    <width>500</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <widget class="QMenu" name="menu_help">
+                <property name="mouseTracking">
+                    <bool>false</bool>
+                </property>
+                <property name="tabletTracking">
+                    <bool>true</bool>
+                </property>
+                <property name="layoutDirection">
+                    <enum>Qt::LeftToRight</enum>
+                </property>
+                <property name="autoFillBackground">
+                    <bool>false</bool>
+                </property>
+                <property name="title">
+                    <string>帮助</string>
+                </property>
+                <property name="toolTipsVisible">
+                    <bool>false</bool>
+                </property>
+                <addaction name="remove"/>
+                <addaction name="separator"/>
+                <addaction name="action"/>
+            </widget>
+            <addaction name="menu_help"/>
+        </widget>
+        <action name="action">
+            <property name="checkable">
+                <bool>true</bool>
+            </property>
+            <property name="text">
+                <string>关于本工具</string>
+            </property>
+            <property name="shortcut">
+                <string>Ctrl+H</string>
+            </property>
+        </action>
+        <action name="remove">
+            <property name="checkable">
+                <bool>true</bool>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+            <property name="text">
+                <string>清空非标准数据</string>
+            </property>
+            <property name="shortcutVisibleInContextMenu">
+                <bool>true</bool>
+            </property>
+        </action>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>

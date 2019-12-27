@@ -35,7 +35,7 @@ class ErrorHunter(object):
 
 
 class ElasticSearchImporter(object):
-    batch_search_size = 5000
+    batch_search_size = 50000
 
     def __init__(self, host="127.0.0.1", port=9200, username=None, password=None):
         if username and password:

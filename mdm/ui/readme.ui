@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>readme</class>
+    <widget class="QDialog" name="readme">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>400</width>
+                <height>300</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>400</width>
+                <height>300</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>800</width>
+                <height>600</height>
+            </size>
+        </property>
+        <property name="font">
+            <font>
+                <family>Microsoft YaHei UI</family>
+                <weight>75</weight>
+                <bold>true</bold>
+            </font>
+        </property>
+        <property name="windowTitle">
+            <string>关于本程序</string>
+        </property>
+        <widget class="QLabel" name="readme_title">
+            <property name="geometry">
+                <rect>
+                    <x>60</x>
+                    <y>10</y>
+                    <width>91</width>
+                    <height>31</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Microsoft YaHei UI</family>
+                    <pointsize>11</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>关于本程序</string>
+            </property>
+        </widget>
+        <widget class="QLabel" name="readme_msg">
+            <property name="geometry">
+                <rect>
+                    <x>60</x>
+                    <y>40</y>
+                    <width>271</width>
+                    <height>131</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>Microsoft YaHei UI</family>
+                    <pointsize>11</pointsize>
+                    <weight>50</weight>
+                    <bold>false</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>请根据本程序的提示进行操作</string>
+            </property>
+            <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+        </widget>
+        <widget class="QDialogButtonBox" name="buttonBox">
+            <property name="geometry">
+                <rect>
+                    <x>210</x>
+                    <y>250</y>
+                    <width>156</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <family>微软雅黑</family>
+                    <pointsize>11</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                </font>
+            </property>
+            <property name="standardButtons">
+                <set>QDialogButtonBox::Ok</set>
+            </property>
+        </widget>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>

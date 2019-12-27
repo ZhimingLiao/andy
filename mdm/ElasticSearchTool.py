@@ -617,6 +617,41 @@ class ElasticSearchTool(object):
         return {"error": 0, "msg": f"处理成功!(备注:共处理{len(names_table)}个表,"
                                    f"置删除标记{count_deleted}个表,删除记录数:{count},增加记录数:{count_add},创建表:{count_create}个,创建属性表:{count_pro}个)"}
 
+    def remove_all(self, es, data_type):
+        """
+        移除所有非数据标准数据;
+        :return:
+        """
+        count_define, count_property, count_menber = 0, 0, 0
+        # 1.定义表根据数据类型找出记录
+        res_define = es.__es.search_by_body(index_name="mdms.entity.masterdatamanage.master_definition",
+                                            DATA_TYPE=data_type)['hits']['hits']
+        for content_define in res_define:
+            # 2.找到属性表记录,删除属性表数据记录
+            res_property = es.__es.search_by_body(index_name="mdms.entity.masterdatamanage.master_property",
+                                                  MASTER_DEF_ID=content_define['_id'])['hits']['hits']
+            # 遍历删除属性表记录
+            for content_property in res_property:
+                # print(content_property)
+                es.__es.delete_data_by_id(index_name="mdms.entity.masterdatamanage.master_property",
+                                          doc_type="MASTER_PROPERTY", id=content_property['_id'])
+                count_property += 1
+
+            # 3.找到成员表数据并且遍历删除
+            res_member = es.__es.search_by_body(index_name="mdms.entity.masterdatamanage.master_member",
+                                                MASTER_DEF_ID=content_define['_id'])['hits']['hits']
+            for content_member in res_member:
+                # print(content_member)
+                es.__es.delete_data_by_id(index_name="mdms.entity.masterdatamanage.master_member",
+                                          doc_type="MASTER_MEMBER", id=content_member['_id'])
+                count_menber += 1
+
+            es.__es.delete_data_by_id(index_name="mdms.entity.masterdatamanage.master_definition",
+                                      doc_type="MASTER_DEFINITION", id=content_define['_id'])
+            count_define += 1
+            # break
+        return {"error": 0, "msg": f"清空引用和主数据记录成功!(备注:定义表({count_define}),属性表({count_property}),成员表({count_menber}))"}
+
 
 if __name__ == "__main__":
     ip, port = "127.0.0.1", 9200
@@ -631,11 +666,11 @@ if __name__ == "__main__":
 
     with Timer.Timer.timer():
         es = ElasticSearchTool(ip_es=ip, port_es=port)
-        index = "mdms.entity.masterdatamanage.master_member"
-        doc = "MASTER_MEMBER"
+        data_type = "MASTER"
         # res = es.sqlite2es_e(index=index, doc_type=doc, flag_deleted=True)
         # res = es.mdm_define()
         # res = es.mdm_to_sqlite()
         # print(res)
-        res = es.sqlite2es_range()
+        # res = es.sqlite2es_range()
+        res = es.remove_all(es, data_type=data_type)
         print(res)

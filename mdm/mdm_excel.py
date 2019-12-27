@@ -19,7 +19,7 @@ from Timer import Timer
 def read_excel(path_excel):
     # 根据xls路径, 根据列名读取里面数据
     try:
-        xls = pd.read_excel(io=path_excel, sheet_name=[0], index_col=None, na_values=['NA'],
+        xls = pd.read_excel(io=path_excel, sheet_name=[0], index_col=None, keep_default_na="",
                             usecols=['序号', '值', "值含义", "说明"])
     # 打印标题, .columns.values
     # print(xls[0].columns.values)
@@ -44,7 +44,7 @@ def read_excel(path_excel):
         return {"error": error, "msg": msg, "detail": detail}
 
 
-def write_define(e, _id, MASTER_DEF_NAME, index_name_define, doc_type_define):
+def write_define(e, _id, dir_name, data_type, MASTER_DEF_NAME, index_name_define, doc_type_define):
     content = {
         "IS_ENABLE": "1",
         "MASTER_DEF_DESC": MASTER_DEF_NAME,
@@ -58,13 +58,13 @@ def write_define(e, _id, MASTER_DEF_NAME, index_name_define, doc_type_define):
         "DELETE_FLAG": "0",
         "STANDARD_NAME": "-",
         "MASTER_DEF_NAME": MASTER_DEF_NAME,
-        "SORT": 1,
+        "SORT": 0,
         "CREATOR_NAME": "zhiming",
         "MASTER_PRO_VERSION_NO": "1",
         "CREATE_TIME": f'{time.strftime("%Y-%m-%d", time.localtime())}T{time.strftime("%H:%M:%S", time.localtime())}+08:00',
         "IS_PUBLISH_MEMBER": "0",
-        "DATA_TYPE": "MASTER",
-        "MASTER_DIR_NAME": "院内标准",
+        "DATA_TYPE": data_type,
+        "MASTER_DIR_NAME": dir_name,
         "MASTER_MEMBER_VERSION_NO": "0"
     }
     e.insert_data_list(index_name=index_name_define, doc_type=doc_type_define,
@@ -72,7 +72,7 @@ def write_define(e, _id, MASTER_DEF_NAME, index_name_define, doc_type_define):
     return content['MASTER_DEF_ID']
 
 
-def write_property(e, id, name, index_name_property, doc_type_property):
+def write_property(e, _id, name, index_name_property, doc_type_property):
     """
     写数据到属性表
     :param e:
@@ -81,7 +81,7 @@ def write_property(e, id, name, index_name_property, doc_type_property):
     :return:
     """
     es_code = {
-        "MASTER_DEF_ID": id,
+        "MASTER_DEF_ID": _id,
         "MASTER_DEF_CODE": utils.get_py(name),
         "MASTER_DEF_NAME": name,
         "MASTER_PRO_ID": utils.get_uuid(),
@@ -105,7 +105,7 @@ def write_property(e, id, name, index_name_property, doc_type_property):
     e.insert_data_list(index_name=index_name_property, doc_type=doc_type_property,
                        data_dict={es_code['MASTER_PRO_ID']: es_code})
     es_name = {
-        "MASTER_DEF_ID": id,
+        "MASTER_DEF_ID": _id,
         "MASTER_DEF_CODE": utils.get_py(name),
         "MASTER_DEF_NAME": name,
         "MASTER_PRO_ID": utils.get_uuid(),
@@ -129,7 +129,7 @@ def write_property(e, id, name, index_name_property, doc_type_property):
     e.insert_data_list(index_name=index_name_property, doc_type=doc_type_property,
                        data_dict={es_name['MASTER_PRO_ID']: es_name})
     es_desc = {
-        "MASTER_DEF_ID": id,
+        "MASTER_DEF_ID": _id,
         "MASTER_DEF_CODE": utils.get_py(name),
         "MASTER_DEF_NAME": name,
         "MASTER_PRO_ID": utils.get_uuid(),
@@ -154,6 +154,7 @@ def write_property(e, id, name, index_name_property, doc_type_property):
 
 
 def write_menber(e, _id, data, index_name_menber, doc_type_menber):
+    flag_change = False
     es_data = {"MASTER_MEMBER_ID": None,
                "MASTER_DEF_ID": _id,
                "MASTER_DEF_CODE": utils.get_py(data[0]),
@@ -172,7 +173,9 @@ def write_menber(e, _id, data, index_name_menber, doc_type_menber):
                "CREATOR_NAME": "zhiming",
                "DELETE_FLAG": "0"}
     for d in data[1]:
-        if data[1].index(d) > 0:
+        if d[1] == "" and d[2] == "":
+            continue
+        if data[1].index(d) > 0 and flag_change:
             es_data["MEMBER"] = json.loads(es_data["MEMBER"])
             # 准备数据
         es_data["MASTER_MEMBER_ID"] = utils.get_uuid()
@@ -192,6 +195,7 @@ def write_menber(e, _id, data, index_name_menber, doc_type_menber):
         # 写入数据到es
         e.insert_data_list(index_name=index_name_menber, doc_type=doc_type_menber,
                            data_dict={es_data["MASTER_MEMBER_ID"]: es_data})
+        flag_change = True
         # break
 
 
@@ -212,7 +216,7 @@ def delete_record(e, _id, name, index_name_define, doc_type_define, index_name_p
             break
 
     if not flag_exist:
-        return {"error": 0, "msg": "不存在记录,不需要删除"}
+        return deleted_count_pro, delete_count_men
 
     # 1.删除表记录
     e.delete_data_by_id(index_name=index_name_define, doc_type=doc_type_define, id=es_deleted_id)
@@ -235,11 +239,13 @@ def deal_data(ip, port, data):
     e = es(host=ip, port=port)
     # 目录id
     # 读取参数
-    config_path = "./config.json"
+    config_path = "config.json"
     json_data = utils.input_json_data_from_file(config_path)
     if json_data.get("error"):
         return {"error": json_data.get("error"), "msg": json_data.get("msg")}
     id_dir = json_data.get('id_dir')
+    dir_name = json_data.get("dir_name")
+    data_type = json_data.get("data_type")
     index_name_define = json_data.get('index_name_define')
     doc_type_define = json_data.get('doc_type_define')
     index_name_property = json_data.get('index_name_property')
@@ -255,10 +261,10 @@ def deal_data(ip, port, data):
                                                         index_name_menber=index_name_menber,
                                                         doc_type_menber=doc_type_menber)
     # 写数据到定义表
-    MASTER_DEF_ID = write_define(e, id_dir, data[0], index_name_define=index_name_define,
+    MASTER_DEF_ID = write_define(e, id_dir, dir_name, data_type, data[0], index_name_define=index_name_define,
                                  doc_type_define=doc_type_define)
     # 写数据到属性表
-    write_property(e, id=MASTER_DEF_ID, name=data[0], index_name_property=index_name_property,
+    write_property(e, _id=MASTER_DEF_ID, name=data[0], index_name_property=index_name_property,
                    doc_type_property=doc_type_property)
     # 写数据到成员表
     write_menber(e, MASTER_DEF_ID, data, index_name_menber=index_name_menber, doc_type_menber=doc_type_menber)
@@ -296,10 +302,20 @@ def main(file_path, addr):
     return {"error": 0, "msg": res['msg']}
 
 
+def read_excel_all(excel_path):
+    xls = pd.read_excel(io=excel_path, keep_default_na="")
+    xls_title = xls.columns.tolist()
+    print(xls_title, type(xls.values()))
+    for content in xls.values:
+        print(content)
+        break
+
+
 if __name__ == "__main__":
-    path_excel = "C:/Users/andy/Desktop/demo.xlsx"
+    path_excel = r"C:\Users\andy\Desktop\厂商字典\人员档案.xls"
     with Timer.timer():
-        # res = read_excel(path_excel)
-        res = delete_record(es(host="127.0.0.1", port=9200), id="437403E4835C43E6B58316CF03605568",
-                            name="妊娠终止方式代码表test")
+        res = read_excel_all(path_excel)
+        # res = pd.read_excel(path_excel)
+        # res = delete_record(es(host="127.0.0.1", port=9200), id="437403E4835C43E6B58316CF03605568",
+        #                     name="妊娠终止方式代码表test")
         print(res)

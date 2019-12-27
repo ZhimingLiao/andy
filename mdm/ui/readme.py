@@ -61,4 +61,4 @@ class Ui_readme(object):
         _translate = QtCore.QCoreApplication.translate
         readme.setWindowTitle(_translate("readme", "关于本程序"))
         self.readme_title.setText(_translate("readme", "关于本程序"))
-        self.readme_msg.setText(_translate("readme", "请根据本程序的提示进行操作;本程序仅适合根据指定excel格式,导入到主数据数据库的院内标准!"))
+        self.readme_msg.setText(_translate("readme", "请根据本程序的提示进行操作;本程序仅适合根据指定excel格式,请按照说明配置对应的文件!"))

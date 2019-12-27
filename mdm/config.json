@@ -1,5 +1,7 @@
 {
   "id_dir": "02C9B5F688694C529D9A4C7BA00856CE",
+  "dir_name": "院内标准",
+  "data_type": "MASTER",
   "index_name_define": "mdms.entity.masterdatamanage.master_definition",
   "doc_type_define": "MASTER_DEFINITION",
   "index_name_property": "mdms.entity.masterdatamanage.master_property",

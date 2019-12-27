@@ -8,6 +8,8 @@ import os
 import sqlite3
 import time
 
+import pandas as pd
+
 from Timer import Timer
 from mdm_enum import DirEnum
 from utils import get_uuid
@@ -350,6 +352,60 @@ def file_save(content: str, path_dir=None, name_file=None, encoding="utf8") -> d
     return {"error": 0, "msg": f"处理成功!(备注:文件保存路径为:{path_file})"}
 
 
+def insert_cv_list(name_table: str, data: list, path_db=r"C:\Users\andy\OneDrive\文档\恺恩泰\mdm\mdm.db") -> dict:
+    conn = sqlite3.connect(path_db, timeout=2000)
+    cur = conn.cursor()
+    # sql_create = f"CREATE TABLE IF NOT EXISTS  '{name_table}'(code TEXT NOT NULL PRIMARY KEY," \
+    #              f"name  TEXT NOT NULL, desc  TEXT NOT NULL, create_time TEXT not null)"
+    # cur.execute(sql_create)
+
+    cur.execute(f"insert into mdm_reference(name, msg, time) values (?, ?, ?)", (name_table, name_table,
+                                                                                 time.strftime("%Y-%m-%d %H:%M:%S",
+                                                                                               time.localtime())))
+    for d in data:
+        try:
+            cur.execute(f"insert into '{name_table}' values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (get_uuid(),
+                                                                                                    d.get("工号"),
+                                                                                                    d.get("姓名"),
+                                                                                                    d.get("身份证号"),
+                                                                                                    d.get("移动电话"),
+                                                                                                    d.get("工作电话"),
+                                                                                                    d.get("性别"),
+                                                                                                    d.get("所在科室"),
+                                                                                                    d.get("财务科室"),
+                                                                                                    d.get("考勤组"),
+                                                                                                    d.get("职工类别"),
+                                                                                                    time.strftime(
+                                                                                                        "%Y-%m-%d %H:%M:%S",
+                                                                                                        time.localtime())))
+        except (sqlite3.IntegrityError,) as e:
+            msg = f"违反了唯一约束,请检查数据!(备注:{e}, {d.get('code')})"
+            error = 1
+            break
+        else:
+            error, msg = 0, "处理成功!"
+    conn.commit()
+    cur.close()
+    conn.close()
+    return {"error": error, "msg": msg}
+
+
+def read_excel_all(excel_path: str):
+    xls = pd.read_excel(excel_path, keep_default_na="")
+    # 获取列名
+    xls_title = xls.columns.tolist()
+    # 根据第3列升序排序
+    xls = xls.sort_values(xls_title[1], ascending=True)
+    data = list()
+    for content in xls.values:
+        ctn = dict()
+        for title in xls_title: ctn[title] = get_uuid() if content[xls_title.index(title)] == "" and title == "code" \
+            else content[xls_title.index(title)]
+        data.append(ctn)
+        # break
+    return xls_title, data
+
+
 if __name__ == "__main__":
     with Timer.timer():
         # # main()
@@ -371,5 +427,8 @@ if __name__ == "__main__":
         # res = insert_cv_batch(name_table='CV08.10.006', desc=" 血 吸虫病诊 断(治 疗)机 构级别代码表,卫生机构", flag=False)
         # res = "  将局麻药物 注射 于神经干 的周 围 ,使该 神 经 分 布 的 区域 产 生 麻 醉作 用的方法".replace(" ", "")
         # res = update_e()
-        res = (get_uuid(), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        # res = (get_uuid(), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+        path = r"C:\Users\andy\Desktop\厂商字典\人员档案.xls"
+        title, data = read_excel_all(excel_path=path)
+        res = insert_cv_list("user", data)
         print(res)
