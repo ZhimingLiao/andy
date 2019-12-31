@@ -132,7 +132,7 @@ def write_property(e, _id, name, dic_property, index_name_property, doc_type_pro
     return len(dic_property)
 
 
-def write_menber(e, parent_id, parent_name, data, dic_property, index_name_menber, doc_type_menber):
+def write_member(e, parent_id, parent_name, data, dic_property, index_name_member, doc_type_member):
     flag_change = False
     es_data = {
         "MASTER_DEF_ID": parent_id,
@@ -171,7 +171,7 @@ def write_menber(e, parent_id, parent_name, data, dic_property, index_name_menbe
         es_data["MEMBER"] = json.dumps(es_data["MEMBER"], ensure_ascii=False)
 
         # 写入数据到es
-        e.insert_data_list(index_name=index_name_menber, doc_type=doc_type_menber,
+        e.insert_data_list(index_name=index_name_member, doc_type=doc_type_member,
                            data_dict={es_data["MASTER_MEMBER_ID"]: es_data})
         flag_change = True
         # break
@@ -181,8 +181,8 @@ def read_excel_all(excel_path: str):
     xls = pd.read_excel(excel_path, keep_default_na="")
     # 获取列名
     xls_title = xls.columns.tolist()
-    # 根据第3列升序排序
-    xls = xls.sort_values(xls_title[1], ascending=True)
+    # 根据第1列升序排序
+    xls = xls.sort_values(xls_title[0], ascending=True)
     data = list()
     for content in xls.values:
         ctn = dict()
@@ -215,8 +215,8 @@ def main():
     doc_type_define = json_data.get('doc_type_define')
     index_name_property = json_data.get('index_name_property')
     doc_type_property = json_data.get('doc_type_property')
-    index_name_menber = json_data.get('index_name_menber')
-    doc_type_menber = json_data.get('doc_type_menber')
+    index_name_member = json_data.get('index_name_member')
+    doc_type_member = json_data.get('doc_type_member')
 
     # 读取excel数据
     title, data = read_excel_all(excel_path=path)
@@ -226,8 +226,8 @@ def main():
                                                         doc_type_define=doc_type_define,
                                                         index_name_property=index_name_property,
                                                         doc_type_property=doc_type_property,
-                                                        index_name_menber=index_name_menber,
-                                                        doc_type_menber=doc_type_menber)
+                                                        index_name_menber=index_name_member,
+                                                        doc_type_menber=doc_type_member)
     # 写数据到定义表
     MASTER_DEF_ID = write_define(e=e, _id=id_dir, master_def_name=name, data_type=data_type, dir_name=dir_name,
                                  index_name_define=index_name_define, doc_type_define=doc_type_define)
@@ -236,8 +236,8 @@ def main():
     write_property(e, _id=MASTER_DEF_ID, name=name, dic_property=dic_property, index_name_property=index_name_property,
                    doc_type_property=doc_type_property)
     # 写数据到成员表
-    write_menber(e=e, parent_id=MASTER_DEF_ID, parent_name=name, data=data, dic_property=dic_property,
-                 index_name_menber=index_name_menber, doc_type_menber=doc_type_menber)
+    write_member(e=e, parent_id=MASTER_DEF_ID, parent_name=name, data=data, dic_property=dic_property,
+                 index_name_member=index_name_member, doc_type_member=doc_type_member)
 
     print({"error": 0, "msg": f"处理数据成功!(备注:属性表删除{deleted_count_pro}条记录,成员表删除{delete_count_men}条记录,"
                               f"增加属性{len(dic_property)}条,成员表增加{len(data)}条记录;id:{MASTER_DEF_ID})"})
@@ -248,5 +248,7 @@ if __name__ == "__main__":
 
     with Timer.Timer.timer():
         print("程序正在处理...")
+        time.sleep(1)
         # main()
-        print(read_excel_all(1))
+        path = r"C:\Users\andy\Desktop\厂商字典\人员档案.xls"
+        print(read_excel_all(excel_path=path)[1])

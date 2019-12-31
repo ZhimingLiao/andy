@@ -6,6 +6,6 @@
   "doc_type_define": "MASTER_DEFINITION",
   "index_name_property": "mdms.entity.masterdatamanage.master_property",
   "doc_type_property": "MASTER_PROPERTY",
-  "index_name_menber": "mdms.entity.masterdatamanage.master_member",
-  "doc_type_menber": "MASTER_MEMBER"
+  "index_name_member": "mdms.entity.masterdatamanage.master_member",
+  "doc_type_member": "MASTER_MEMBER"
 }
