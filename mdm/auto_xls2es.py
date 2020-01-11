@@ -11,6 +11,7 @@ import json
 import time
 
 import pandas as pd
+from tqdm import tqdm
 
 import utils
 from ElasticSearchImporter import ElasticSearchImporter as es
@@ -85,6 +86,7 @@ def write_property(e, _id, name, dic_property, index_name_property, doc_type_pro
     :param e:
     :param _id:
     :param name:
+    :param dic_property:
     :param index_name_property:
     :param doc_type_property:
     :return:
@@ -184,13 +186,23 @@ def read_excel_all(excel_path: str):
     # 根据第1列升序排序
     xls = xls.sort_values(xls_title[0], ascending=True)
     data = list()
-    for content in xls.values:
-        ctn = dict()
-        for title in xls_title: ctn[title] = utils.get_uuid() if content[
-                                                                     xls_title.index(title)] == "" and title == "code" \
-            else content[xls_title.index(title)]
-        data.append(ctn)
+    # 配置进度条
+    # pbar = tqdm(total=len(xls.values))
+    # pbar.set_description("文件读取完成进度")
+    # 使用上下文管理器进行打印进度条,防止出现多行进度条问题
+    with tqdm(total=len(xls.values)) as bar:
+        bar.set_description("文件读取完成进度")
+        for content in xls.values:
+            ctn = dict()
+            for title in xls_title:
+                ctn[title] = content[xls_title.index(title)]
+            data.append(ctn)
+            bar.update(1)
+            # time.sleep(0.01)
         # break
+    # 进度条使用完成后关闭
+    # pbar.close()
+
     return xls_title, data
 
 
@@ -245,10 +257,10 @@ def main():
 
 if __name__ == "__main__":
     import Timer
-
+    from pprint import pprint
     with Timer.Timer.timer():
         print("程序正在处理...")
-        time.sleep(1)
+        time.sleep(0.1)
         # main()
         path = r"C:\Users\andy\Desktop\厂商字典\人员档案.xls"
-        print(read_excel_all(excel_path=path)[1])
+        pprint(read_excel_all(excel_path=path)[0])
