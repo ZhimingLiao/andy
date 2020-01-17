@@ -1,15 +1,16 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
-# ================================================================
-#   Copyright (C) 2019 * Ltd. All rights reserved.
+# ======================================================================
+#   Copyright (C) 2020 liaozhimingandy@qq.com Ltd. All rights reserved.
 #
 #   Editor      : PyCharm
-#   File name   : andy	
+#   Project     : andy
+#   File name   : SNNModel
 #   Author      : liaozhimingandy@qq.com
 #   Created date: 2020-01-10 13:57
-#   Description :
+#   Description : 简易图片分类模型;无使用卷积神经网络;全为全连接层训练;
 #
-# ================================================================
+# ======================================================================
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os
@@ -24,15 +25,15 @@ import tensorflow as tf
 from tensorflow import keras
 from tqdm import tqdm
 
+from IBaseNet import IBaseNet
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 assert tf.__version__.startswith('2.')
 
-from IBaseModel import IBaseModel
 
-
-class SNNModel(IBaseModel):
-    def __init__(self):
-        self.__name = "SNNModel"
+class SNet(IBaseNet):
+    def __init__(self, name="SNet"):
+        self.__name = name
 
     def __generate_paths_lable(self, dir_path: str, flag_random=True) -> tuple:
         assert len(dir_path) > 1
@@ -86,16 +87,18 @@ class SNNModel(IBaseModel):
             keras.layers.Dense(10, activation=keras.activations.softmax, name="output")
         ])
         # 使用类对象无法使用保存函数,无法使用callback参数
-        # model = SNN()
+        # from model.SNM import SNM
+        # model = SNM()
         # model.build(input_shape=(None, 28, 28))
-        model.compile(loss="sparse_categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
+        model.compile(loss=keras.losses.sparse_categorical_crossentropy, optimizer=keras.optimizers.Adam(),
+                      metrics=[keras.metrics.SparseCategoricalAccuracy()])
         return model
 
     def callbacks(self, log_dir=None, file_name="fashion_model.h5"):
         # 设置回调函数
         # 如果直接使用字符串,则报错;找问题找很久了
         if log_dir is None:
-            dir_log = os.path.join("callbacks")
+            dir_log = os.path.join("../callbacks")
         else:
             dir_log = os.path.join(log_dir, "callbacks")
 
@@ -110,9 +113,9 @@ class SNNModel(IBaseModel):
         ]
         return callbacks
 
-    def train(self, model, train_x, train_y, valid_x, valid_y, epochs=5, callbacks=None):
-        history = model.fit(x=train_x, y=train_y, epochs=epochs, verbose=2,
-                            validation_data=(valid_x, valid_y))
+    def train(self, model, *args, **kwargs):
+        history = model.fit(x=kwargs.get('train_x'), y=kwargs.get('train_y'), epochs=kwargs.get('epochs'), verbose=2,
+                            validation_data=(kwargs.get('valid_x'), kwargs.get('valid_y')))
         return history
 
     def evaluate(self, model, x, y):
@@ -159,8 +162,8 @@ class SNNModel(IBaseModel):
         # eval = self.evaluate(model=model, x=test_x, y=test_y)
         # print(eval)
         pre = self.predict(model=model, pre_data=test_x)
-        print(names, test_y[0], self.__get_key(names, np.argmax(pre, axis=1)[0]),
-              "可能性:" + '{:.1f}%'.format(100 * np.max(pre[0])), self.__get_key(names, test_y[0]))
+        print(names, test_y[0], "实际标签:" + "".join(self.__get_key(names, np.argmax(pre, axis=1)[0])),
+              "可能性:" + '{:.6f}%'.format(100 * np.max(pre[0])) + "->", "".join(self.__get_key(names, test_y[0])))
 
         # self.save(model)
         # 绘制学习率
@@ -199,13 +202,13 @@ class SNNModel(IBaseModel):
         plt.grid(False)
         plt.xticks([])
         plt.yticks([])
-        plt.title(title)
-        plt.xlabel("{}(Probability:{:.1f}%)".format(lable, chance), color="red")
+        plt.title("".join(title))
+        plt.xlabel("{}(Likely:{:.6f}%)".format("".join(lable), chance), color="blue")
         plt.show()
 
 
 def main():
-    s = SNNModel()
+    s = SNet()
     # s.callback(log_dir=r"D:\test", file_name="test")
     s.main()
 

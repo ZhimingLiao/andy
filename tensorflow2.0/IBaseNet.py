@@ -1,23 +1,25 @@
 # !/usr/bin/env python3
 # -*- coding:utf-8 -*-
-# ================================================================
-#   Copyright (C) 2019 * Ltd. All rights reserved.
+
+# ======================================================================
+#   Copyright (C) 2020 liaozhimingandy@qq.com Ltd. All rights reserved.
 #
 #   Editor      : PyCharm
-#   File name   : andy	
+#   Project     : andy
+#   File name   : IBaseModel
 #   Author      : liaozhimingandy@qq.com
 #   Created date: 2020-01-10 10:42
-#   Description :基本模型接口规范
+#   Description : 基本模型接口规范
 #
-# ================================================================
+# ======================================================================
 
 from abc import ABCMeta, abstractmethod
 
 
-class IBaseModel(metaclass=ABCMeta):
+class IBaseNet(metaclass=ABCMeta):
 
     @abstractmethod
-    def preprocess_data(self, input_data):
+    def preprocess_data(self, *args, **kwargs):
         """
         数据预处理,得到numpy数据集
         :return: numpy数据集(包括数据和对应标签以及字典参照[如果有])
@@ -25,7 +27,7 @@ class IBaseModel(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def batch_dataset(self, x, y, train_pre=0.7, valid_pre=0.2, test_pre=0.1):
+    def batch_dataset(self, x, y, *args, **kwargs):
         """
         将整个数据集按一定比例分成训练集,验证集,测试集
         :param x: 需要分割的数据集
@@ -45,7 +47,7 @@ class IBaseModel(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def callbacks(self, log_dir=None, file_name=None):
+    def callbacks(self, *args, **kwargs):
         """
         自定义回调需要处理的内容,如:TensorBoard,ModelCheckpoint,EarlyStopping
         :param log_dir: 训练好的日志目录
@@ -55,8 +57,9 @@ class IBaseModel(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def train(self, model, train_x, train_y, valid_x, valid_y, epochs=5, callbacks=None):
+    def train(self, model, *args, **kwargs):
         """
+        理论上len(train_x)=batch_size*steps_per_epoch
         :param model: 已经编译好的model
         :param train_x: 需要训练的数据
         :param train_y: 需要训练的标签
@@ -64,7 +67,7 @@ class IBaseModel(metaclass=ABCMeta):
         :param valid_y: 验证的标签
         :param epochs: 训练的次数
         :param callbacks: 回调函数
-        :return:
+        :return: history
         """
         pass
 
@@ -79,16 +82,16 @@ class IBaseModel(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def predict(self, model, pre_data):
+    def predict(self, model, x):
         """
         :param model: 已编译好的model
-        :param pre_data: 需要预测的数据
+        :param x: 需要预测的数据
         :return:
         """
         pass
 
     @abstractmethod
-    def save(self, model, file_path=None, file_name=None):
+    def save(self, model, *args, **kwargs):
         """
         :param model: 已编译好的model
         :param file_path: 保存路径
@@ -98,9 +101,9 @@ class IBaseModel(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def load(self, file_name):
+    def load(self, file_path):
         """
-        :param file_name: 保存的模型的文件地址
+        :param file_path: 保存的模型的文件地址
         :return:
         """
         pass
