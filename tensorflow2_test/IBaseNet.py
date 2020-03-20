@@ -32,9 +32,6 @@ class IBaseNet(metaclass=ABCMeta):
         将整个数据集按一定比例分成训练集,验证集,测试集
         :param x: 需要分割的数据集
         :param y:标签值,和数据值数量一致
-        :param train_pre:训练数据占总数据集的比例
-        :param valid_pre:验证数据占总数据的比例
-        :param test_pre:测试数据占总数据的比例
         :return: 训练集,验证集,测试集
         """
         pass

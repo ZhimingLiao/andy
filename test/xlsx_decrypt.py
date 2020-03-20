@@ -9,7 +9,7 @@
 #   File Name   : xlsx_decrypt.py	
 #   Author      : liaozhimingandy@qq.com
 #   Created Date: 2020-01-21 10:44
-#   Description : excel密码尝试
+#   Description : excel密码尝试;使用模块为pywin32
 #
 # ======================================================================
 

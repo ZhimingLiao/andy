@@ -17,7 +17,8 @@ from PyQt5.QtCore import Qt
 # 处理excel数据导入到es数据库
 import mdm_excel
 
-from ui.main import Ui_MainWindow
+# todo 需要补充缺失的Ui_MainWindow文件;这个文件为主界面;
+# from main import Ui_MainWindow
 from readme import readme
 
 

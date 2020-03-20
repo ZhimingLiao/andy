@@ -28,6 +28,11 @@ from IBaseNet import IBaseNet
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 assert tf.__version__.startswith('2.')
 
+# 关闭gpu转使用cpu,判断gpu是否可用
+# os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+# gpu_ok = tf.test.is_gpu_available()
+# print(gpu_ok)
+
 
 class TitanicNet(IBaseNet):
 
